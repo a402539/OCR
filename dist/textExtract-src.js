@@ -1,92 +1,30 @@
-﻿/*
- Recognise text from image
- (c) 2013, ABС brothers
-*/
-(function () {
-"use strict";
-﻿/*
- основная
- (c) 2013, ABС brothers
-*/
-(function()
-{
-	var ocr = {						// менеджер загрузки image
-		'run': function(item)	{					// добавить запрос в конец очереди
-console.log('run' , item); 
-			return item;
-		}
-		,'unshift': function(item)	{				// добавить запрос в начало очереди
-			items.unshift(item);
-			chkTimer();
-			return items.length;
-		}
-		,'getCounts': function()	{				// получить размер очереди + колич.выполняющихся запросов
-//console.log('getCounts' , curCount, items.length); 
-			return items.length + (curCount > 0 ? curCount : 0);
-		}
-	};
+﻿var deps = [
+    "main.js", 
+    "utils.js",
+    "histogram.js"
+];
 
-	//расширяем namespace
-	if(!window.abcAPI) window.abcAPI = {};
-	window.abcAPI['ocr'] = ocr; 	// основная
+if (typeof exports !== 'undefined') {
+	exports.deps = deps;
+}
+﻿(function() {
+	var scripts = deps;
+
+	function getSrcUrl() {
+		var scripts = document.getElementsByTagName('script');
+		for (var i = 0; i < scripts.length; i++) {
+			var src = scripts[i].src;
+			if (src) {
+				var res = src.match(/^(.*)textExtract-src\.js$/);
+				if (res) {
+					return res[1] + '../src/';
+				}
+			}
+		}
+	}
+
+	var path = getSrcUrl();
+    for (var i = 0; i < deps.length; i++) {
+		document.writeln("<script src='" + path + deps[i] + "'></script>");
+	}
 })();
-
-
-
-﻿/*
- утилиты
- (c) 2013, ABС brothers
-*/
-(function()
-{
-	var utils = {						// менеджер загрузки image
-		'run': function(item)	{					// добавить запрос в конец очереди
-console.log('run' , item); 
-			return item;
-		}
-		,'unshift': function(item)	{				// добавить запрос в начало очереди
-			items.unshift(item);
-			chkTimer();
-			return items.length;
-		}
-		,'getCounts': function()	{				// получить размер очереди + колич.выполняющихся запросов
-//console.log('getCounts' , curCount, items.length); 
-			return items.length + (curCount > 0 ? curCount : 0);
-		}
-	};
-
-	//расширяем namespace
-	if(!window.abcAPI) window.abcAPI = {};
-	window.abcAPI['utils'] = utils; 	// общие утилиты
-})();
-
-
-﻿/*
- histogram
- (c) 2013, ABС brothers
-*/
-(function()
-{
-	var histogram = {						// менеджер загрузки image
-		'run': function(item)	{					// добавить запрос в конец очереди
-console.log('run' , item); 
-			return item;
-		}
-		,'unshift': function(item)	{				// добавить запрос в начало очереди
-			items.unshift(item);
-			chkTimer();
-			return items.length;
-		}
-		,'getCounts': function()	{				// получить размер очереди + колич.выполняющихся запросов
-//console.log('getCounts' , curCount, items.length); 
-			return items.length + (curCount > 0 ? curCount : 0);
-		}
-	};
-
-	//расширяем namespace
-	if(!window.abcAPI) window.abcAPI = {};
-	window.abcAPI['histogram'] = histogram; 	// построение histogram
-})();
-
-
-}());
