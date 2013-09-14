@@ -1,5 +1,0 @@
-﻿/*
- Recognise text from image
- (c) 2013, ABС brothers
-*/
-!function(){"use strict";!function(){var n={run:function(n){return console.log("run",n),n},unshift:function(n){return items.unshift(n),chkTimer(),items.length},getCounts:function(){return items.length+(curCount>0?curCount:0)}};window.abcAPI||(window.abcAPI={}),window.abcAPI.ocr=n}(),function(){var n={run:function(n){return console.log("run",n),n},unshift:function(n){return items.unshift(n),chkTimer(),items.length},getCounts:function(){return items.length+(curCount>0?curCount:0)}};window.abcAPI||(window.abcAPI={}),window.abcAPI.utils=n}(),function(){var n={run:function(n){return console.log("run",n),n},unshift:function(n){return items.unshift(n),chkTimer(),items.length},getCounts:function(){return items.length+(curCount>0?curCount:0)}};window.abcAPI||(window.abcAPI={}),window.abcAPI.histogram=n}()}();
