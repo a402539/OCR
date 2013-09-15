@@ -5,18 +5,20 @@
 (function()
 {
 	var ocr = {						// менеджер загрузки image
-		'run': function(item)	{					// добавить запрос в конец очереди
-console.log('run' , item); 
+		'image': null
+		,'run': function(url)	{					// загрузить image
 			return item;
 		}
-		,'unshift': function(item)	{				// добавить запрос в начало очереди
-			items.unshift(item);
-			chkTimer();
-			return items.length;
-		}
-		,'getCounts': function()	{				// получить размер очереди + колич.выполняющихся запросов
-//console.log('getCounts' , curCount, items.length); 
-			return items.length + (curCount > 0 ? curCount : 0);
+		,'setImage': function(url)	{		// загрузить image
+            var imageObj = new Image();
+            imageObj.onload = function() {
+                ocr.image = imageObj;
+                //console.log('imageObj' , imageObj); 
+            };
+            imageObj.onerror = function() {
+                console.log('onerror: ' , url); 
+            };
+            imageObj.src = url;
 		}
 	};
 

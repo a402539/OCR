@@ -20,36 +20,46 @@
 </head>
 <body>
 	<div id="controls">
-		<button id="prev">Prev day</button>
-		<button id="next">Next day</button>
-		<button id="dayFilter">Day flybys</button>
-		<button id="nightFilter">Night flybys</button>
-		<button id="noneFilter">All flybys</button>
+		<button id="imgToCanvas">imgToCanvas</button>
+		<button id="imgFilter">фильтрация</button>
+		<button id="find">Поиск символов</button>
 	</div>
 
 	<div id="map" style="width: 100%; height: 100%">
-        <img id="image1" src="00292.jpg">
    </div>
 	<script src="../dist/textExtract-src.js"></script>
 	<script>
 
-console.log('abcAPI' , window.abcAPI['ocr']); 
-		//var map = L.map('map').setView([62.880844, 27.048339], 5);
-       
-		document.getElementById("dayFilter").onclick = function() {
-			gmxLayer.setFilter(function(item) {
-                return item.properties.IsDay === 'True';
-            });
+        console.log('Старт: '); 
+		var main = window.abcAPI['ocr'];
+        main.setImage('00292.jpg');
+		var canvas = null;
+      
+		document.getElementById("imgToCanvas").onclick = function() {
+			canvas = window.abcAPI['histogram'].imgToCanvas(main.image);
+            document.getElementById("map").appendChild(canvas);
 		}
         
-		document.getElementById("nightFilter").onclick = function() {
-			gmxLayer.setFilter(function(item) {
-                return item.properties.IsDay !== 'True';
+		document.getElementById("imgFilter").onclick = function() {
+			var len = window.abcAPI['histogram'].imgFilter({
+                'from': 150
+                ,'width': 870
+                ,'height': 700
+                ,'x': 40
+                ,'y': 140
             });
+            console.log('пикселов: ' , len/4); 
 		}
         
-		document.getElementById("noneFilter").onclick = function() {
-			gmxLayer.setFilter(null);
+		document.getElementById("find").onclick = function() {
+			var ph = window.abcAPI['histogram'].findLetters({
+                'from': 150
+                ,'width': 870
+                ,'height': 700
+                ,'x': 40
+                ,'y': 140
+            });
+            console.log('найдено: ' , ph['notNull']);
 		}
  
 	</script>
