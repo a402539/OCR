@@ -46,14 +46,43 @@
             var begY = ph['y'] || 0;
             var from = ph['from'] || 50;
             var to = ph['to'] || 255;
-            var ww = ph['width'] || this.width;
+            var ww = ph['width'] || this.width; // в пикселах
             var hh = ph['height'] || this.height;
             var imgData = this.ctx.getImageData(begX, begY, ww, hh);
-            var notNull = 0;
             var out = ph;
-            for (var i = 0, len = imgData.data.length; i < len; i+=4) {
+            var notNull=0; // число непустых пикселов
+            var Letters = []; // массив символов
+            var Letter=[]; // символ - временный массив для хранения текущего символа
+            var LetterIndex=-1; // временный индекс символов соседних пикселей
+            var puxel=[]; // вспомогательный двумерный массив - для каждого пиксела - индекс символа в массиве letters
+            for (var i = 0, len = imgData.data.length; i < len; i+=4) { // каждый пиксел - 4 элемента
+            	 // всего колонок ww
+            	 // всего строк -len%(-4*ww)
+            	 stroka=i%(4*ww); // номер строки, нумерация с 0
+            	 kolonka=(i-4*ww*stroka)%4; // номер колонки, нумерация с 0
                if (imgData.data[i] < 255) {
                 notNull++;
+                if (stroka==0){
+                	if(kolonka==0){
+                		puxel[0][0]=0; Letters[0][0]=[0,0];
+                	}
+                	else{
+                		LetterIndex=puxel[0,kolonka-1];
+                		if (LetterIndex>=0){
+                			Letters[0][kolonka]=[0,0];
+                		}
+                	}
+                		
+                // вверху слева
+                LetterIndex=puxel[?(stroka==0,0,stroka-1),?(kolonka==0,0,kolonka-1)];
+                // вверху прямо
+                LetterIndex2=puxel[?(stroka==0,0,stroka-1),kolonka];
+                if(LetterIndex<0){LettreIndex=LetterIndex2}
+                else{
+                	if(LetterIndex2>=0){
+                		// Содержимое массива Letters[LetterIndex2] добавить к массиву Letters[LetterIndex]
+                		}
+                }
                }
  			}
             out['notNull'] = notNull;
