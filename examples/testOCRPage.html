@@ -23,6 +23,7 @@
 		<button id="imgToCanvas">imgToCanvas</button>
 		<button id="imgFilter">фильтрация</button>
 		<button id="find">Поиск символов</button>
+		<button id="drawResult">Нарисуем найденные символы</button>
 	</div>
 
 	<div id="map" style="width: 100%; height: 100%">
@@ -43,23 +44,35 @@
 		document.getElementById("imgFilter").onclick = function() {
 			var len = window.abcAPI['histogram'].imgFilter({
                 'from': 150
-                ,'width': 870
-                ,'height': 700
-                ,'x': 40
-                ,'y': 140
+                ,'width': 100
+                ,'height': 100
+                ,'x': 100
+                ,'y': 288
             });
             console.log('пикселов: ' , len/4); 
 		}
-        
+var res = null;
 		document.getElementById("find").onclick = function() {
-			var ph = window.abcAPI['histogram'].findLetters({
+			res = window.abcAPI['histogram'].findLetters({
                 'from': 150
-                ,'width': 870
-                ,'height': 700
-                ,'x': 40
-                ,'y': 140
+                ,'width': 100
+                ,'height': 100
+                ,'x': 100
+                ,'y': 288
             });
-            console.log('найдено: ' , ph['notNull']);
+            console.log('найдено символов: ' , res.length);
+		}
+
+		document.getElementById("drawResult").onclick = function() {
+			var ph = window.abcAPI['histogram'].drawResult({
+                'width': 100
+                ,'height': 100
+                ,'x': 100
+                ,'y': 288
+                ,'tx': 600
+                ,'ty': 288
+                ,'res': res
+            });
 		}
  
 	</script>
