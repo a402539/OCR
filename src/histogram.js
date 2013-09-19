@@ -54,8 +54,7 @@
 
             var smvConcat = function(raw, col, to) {
                 var ind = puxel[raw][col];
-if(ind === to) {
-var tt =1;
+if(ind === to) {    // пытаемся обьединить сомвол сам с собой
 return;
 }
 
@@ -110,12 +109,12 @@ return;
             for (var key in Letters) {
                 var simv = Letters[key];
                 simv['bounds'] = window.abcAPI['utils'].bounds(simv['coordinates']);
-                
+                /*
                 for (var j = 0, len1 = simv['coordinates'].length; j < len1; j++) {
                     var arr = simv['coordinates'][j];
                     arr[0] -= simv['bounds'].min.x;
                     arr[1] -= simv['bounds'].min.y;
-                }
+                }*/
             }
             return Letters;
 		}
@@ -127,7 +126,7 @@ return;
             var hh = ph['height'] || this.height;
 
             var Letters = this.normalization(ph['res']);
-            var imgDataDraw = this.ctx.getImageData(ph['tx'], ph['ty'], 100, 400);
+            var imgDataDraw = this.ctx.getImageData(ph['tx'], ph['ty'], ww, hh);
             for (var i = 0, len1 = imgDataDraw.data.length; i < len1; i+=4) {       // Покрасим белым поле вывода
                 imgDataDraw.data[i] = 
                 imgDataDraw.data[i+1] = 
@@ -137,16 +136,16 @@ return;
             var i = 0;
             for (var key in Letters) {
                 var simv = Letters[key];
-                var add = 100 * i++;
+                var add = ww * i++;
                 for (var j = 0, len1 = simv['coordinates'].length; j < len1; j++) {
                     var arr = simv['coordinates'][j];
-                    var indRes = (arr[1] + add) * 100 + arr[0];
+                    var indRes = (arr[1] + 0) * w4 + arr[0]*4;
                     imgDataDraw.data[indRes] = 
                     imgDataDraw.data[indRes + 1] = 
                     imgDataDraw.data[indRes + 2] = 0;
                 }
            }
-           this.ctx.putImageData(imgDataDraw, ph['tx'], ph['ty'], 0, 0, 100, 400);
+           this.ctx.putImageData(imgDataDraw, ph['tx'], ph['ty'], 0, 0, ww, hh);
 		}
         
 	};
