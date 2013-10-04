@@ -200,11 +200,12 @@ histogram.getAlfaArray();
                 imgDataDraw.data[i+3] = 255;
             }
             var k = 0;
+            var alpha = null;
             for (var key in this.alfaHash) {
-                var simv = this.alfaHash[key];
+                alpha = this.alfaHash[key];
                 var add = ww * k;
-                for (var j = 0, len1 = simv['coordinates'].length; j < len1; j++) {
-                    var arr = simv['coordinates'][j];
+                for (var j = 0, len1 = alpha['coordinates'].length; j < len1; j++) {
+                    var arr = alpha['coordinates'][j];
                     var indRes = (arr[1] + 0) * w4 + arr[0]*4;
                     imgDataDraw.data[indRes] = 
                     imgDataDraw.data[indRes + 1] = 
@@ -213,8 +214,17 @@ histogram.getAlfaArray();
                 k++;
 break;
             }
+            var simvRes = null;
+            var percent = 0;
             for (var i = 0, len = Letters.length; i < len; i++) {
                 var simv = Letters[i];
+
+var pt = histogram.compare(alpha, simv);
+console.log('compare: ', i , pt.prc , pt.w , pt.h);
+if(pt.prc > percent) {
+    percent = pt.prc;
+    simvRes = i;
+}
                 var add = 20 * k;
                 for (var j = 0, len1 = simv['coordinates'].length; j < len1; j++) {
                     var arr = simv['coordinates'][j];
@@ -224,14 +234,29 @@ break;
                     imgDataDraw.data[indRes + 2] = 0;
                     //imgDataDraw.data[indRes + 3] = 255;
                 }
+/*
+if(pt.prc) {
+                var pw4 = 4 * pt.w;
+                for (var j = 0, len1 = pt.d2.length; j < len1; j+=4) {
+                    if(pt.d2[j + 3] < 255) continue;
+                    var x = j % pw4;
+                    var y = Math.floor(j / pw4);
+                    var indRes = (y + add) * w4 + (x + 30)*4;
+                    imgDataDraw.data[indRes] = 
+                    imgDataDraw.data[indRes + 1] = 
+                    imgDataDraw.data[indRes + 2] = 0;
+                    imgDataDraw.data[indRes + 3] = 255;
+                }
+}
+*/                
                 k++;
 //break;
             }
 
            this.ctx.putImageData(imgDataDraw, ph['tx'], ph['ty'], 0, 0, ww, hh);
 		}
-		,'nok': function(n1, n2)	{	    	// сравнение
-            var ww = s1['bounds'].max.x * s2['bounds'].max.x;
+		,'nod': function(n1, n2)	{	    	// наименьшее общее кратное
+            if(n1 == 0 || n2 == 0) return 0;
             var p = n1 % n2;
             while (p != 0) {
                 n1 = n2;
@@ -240,10 +265,61 @@ break;
             }
             return n2;
 		}
+		,'getDataFromScaledSimv': function(s1, w, h)	{	    	// скалирование символа
+            var canvas = document.createElement('canvas');
+            canvas.width = s1['bounds'].max.x;
+            canvas.height = s1['bounds'].max.y;
+            var w4 = 4 * canvas.width;
+            var ctx = canvas.getContext('2d');
+            var imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+/*            
+            for (var i = 0, len1 = imgData.data.length; i < len1; i+=4) {       // Покрасим белым поле вывода
+                imgData.data[i] = 
+                imgData.data[i+1] = 
+                imgData.data[i+2] = 
+                imgData.data[i+3] = 255;
+            }
+*/
+            for (var j = 0, len1 = s1['coordinates'].length; j < len1; j++) {
+                var arr = s1['coordinates'][j];
+                var indRes = arr[1] * w4 + arr[0]*4;
+                imgData.data[indRes] = 255;
+                imgData.data[indRes + 1] = 
+                imgData.data[indRes + 2] = 0;
+                imgData.data[indRes + 3] = 255;
+            }
+            ctx.putImageData(imgData, 0, 0, 0, 0, canvas.width, canvas.height);
+//document.getElementById("controls").appendChild(canvas);
+           
+            var canvas1 = document.createElement('canvas');
+            canvas1.width = w;
+            canvas1.height = h;
+            var ctx1 = canvas1.getContext('2d');
+            ctx1.drawImage(canvas, 0, 0, canvas.width, canvas.height, 0, 0, w, h);
+document.getElementById("controls").appendChild(canvas1);
+            return ctx1.getImageData(0, 0, w, h).data;
+		}
 		,'compare': function(s1, s2)	{	    	// сравнение
-            var ww = this.nok(s1['bounds'].max.x, s2['bounds'].max.x);
-            var hh = this.nok(s1['bounds'].max.y, s2['bounds'].max.y);
-            return false;
+            var nx = this.nod(s1['bounds'].max.x, s2['bounds'].max.x);
+            var ny = this.nod(s1['bounds'].max.y, s2['bounds'].max.y);
+            if(nx == 0 || ny == 0) return {'prc': 0};
+            var ww = s1['bounds'].max.x * s2['bounds'].max.x / nx;
+            var hh = s1['bounds'].max.y * s2['bounds'].max.y / ny;
+            if(ww == 0 || hh == 0) return {'prc': 0};
+//return 0;
+
+document.getElementById("controls").appendChild(document.createElement('br'));
+            var d1 = histogram.getDataFromScaledSimv(s1, ww, hh);
+            var d2 = histogram.getDataFromScaledSimv(s2, ww, hh);
+document.getElementById("controls").appendChild(document.createElement('br'));
+            var cnt = 0;
+            for (var i = 0, len1 = d1.length; i < len1; i+=4) {       // Найдем совпадения
+                if(d1[i + 0] > 128 && d2[i + 0] > 128) {
+                    cnt++;
+                }
+            }
+            var prc = 4*cnt/len1;
+            return {'prc': prc, 'd1': d1, 'd2': d2, 'w': ww, 'h': hh};
 		}
         
 	};
