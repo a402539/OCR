@@ -311,14 +311,18 @@ document.getElementById("controls").appendChild(canvas1);
 document.getElementById("controls").appendChild(document.createElement('br'));
             var d1 = histogram.getDataFromScaledSimv(s1, ww, hh);
             var d2 = histogram.getDataFromScaledSimv(s2, ww, hh);
-document.getElementById("controls").appendChild(document.createElement('br'));
             var cnt = 0;
             for (var i = 0, len1 = d1.length; i < len1; i+=4) {       // Найдем совпадения
-                if(d1[i + 0] > 128 && d2[i + 0] > 128) {
+                if(d1[i + 0] == 255 && d2[i + 0] == 255) {
                     cnt++;
                 }
             }
             var prc = 4*cnt/len1;
+var span = document.createElement('span');
+span.style.backgroundColor = 'white';
+span.innerHTML = 'prc: ' + prc;
+document.getElementById("controls").appendChild(span);
+document.getElementById("controls").appendChild(document.createElement('br'));
             return {'prc': prc, 'd1': d1, 'd2': d2, 'w': ww, 'h': hh};
 		}
         
