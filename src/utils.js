@@ -49,26 +49,21 @@ console.log('run' , item);
 	}
 	else return false; // отрезки не пересекаются
 },
-	'intersectsPQRABCD': function(P,Q,R,A,B,C,D){
-	// P,Q - отрезок первого (выпуклого) контура
-	// R - третья точка первого контура
-	// A,B,C,D - 2-й (выпуклый) контур
-	// Функция должна выяснить, разделяет ли отрезок PQ контуры PQR и ABCD
+	'intersectsPQRA': function(P,Q,R,A){
+	// P,Q - прямая
+	// R - 1-я точка
+	// A - 2-я точка
+	// Функция должна выяснить, разделяет ли прямая PQ точки R и A
 	'SignOfLine' = function(U,V,W){// функция определяет расположение точки U относительно прямой VW
-		return (W.y-V.y)*(U.x-V.x)-(W.x-V.x)*(U.y-V.y);// >0 - по одну сторону, <0 - по другую, =0 - на прямой
+		return (W.y-V.y)*(U.x-V.x)-(W.x-V.x)*(U.y-V.y);// >0 - по часовой стрелке, <0 - против часовой стрелки, =0 - на прямой
 		}
 	var SR=SignOfLine(R,P,Q);
 	var SA=SignOfLine(A,P,Q);
-	var SB=SignOfLine(B,P,Q);
-	var SC=SignOfLine(C,P,Q);
-	var SD=SignOfLine(D,P,Q);
-	if(SR*SA<=0 && SR*SB<=0 & SR*SC<=0 && SR*SD<=0){// контуры внешние
+	if(SR*SA<0){// точки по разные стороны от прямой
 		return true;
 		}
-	elseif(SA*SB<0 || SA*SC<0 || SA*SD<0 || SB*SC<0 || SB*SD<0 || SC*SD<0){// 2-й контур пересекает прямую
-		}
-	else{// неизвестно, надо проверять следующий отрезок первогг контура
-		return NAN;
+	else{ // точки по одну сторону от прямой
+		return false;
 	} 
 },
         'bounds': function(arr) {							// получить bounds массива точек
