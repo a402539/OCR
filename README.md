@@ -32,6 +32,11 @@ jake dev
 + Прописать его в файле `build/deps.js`
 + Из папки OCR запустить команду `jake dev`
 
+Demos
+------
+  * [testOCRPage](http://a402539.github.com/OCR/examples/testOCRPage.html) - тест распознавания.
+  * [histogram](http://a402539.github.com/OCR/examples/histogram.html) - гистограмма.
+
 Алгоритм выделения символов
 ------
 
